@@ -1,4 +1,4 @@
-# Eathquake End-to-End Azure Data Engineering Project
+# End-to-End Earthquake Data Pipeline with Azure, Databricks & Power BI
 
 ## Navigation / Quick Access
 Quickly move to the section you are interested in by clicking on the appropriate link:
