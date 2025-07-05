@@ -199,7 +199,8 @@ Each notebook runs as an activity in the ADF pipeline, and parameters are passed
 
 #### 📁 ADF Pipeline Overview
 
-The ADF pipeline orchestrates the daily execution of the Databricks notebooks. Below is the structure of the pipeline:
+The ADF pipeline orchestrates the daily execution of the Databricks notebooks. Create a pipeline in adf called `pl-earthquake`.
+Below is the structure of the pipeline:
 
 ![ADF Pipeline](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/adf_pipeline.PNG)
 
