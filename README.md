@@ -250,7 +250,7 @@ The enriched dataset, now with country codes and significance classifications, i
 
 #### Triggers
 A daily Trigger is created and time set to run the pipeline daily. This is after debug run has been done and everything confirmed to work fine
-![ADF Pipeline](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/pipelineruns.PNG)
+![Pipeline runs](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/pipelineruns.PNG)
 
 ---
 ### 9. 🏞️ Moving Data to Microsoft Fabric Lakehouse
@@ -273,17 +273,30 @@ Key benefits:
 
 
 ---
-
-### 10. 📊 Visualizing in Power BI
+## Dashboard
+### Visualizing in Power BI
 
 The data in the Fabric Lakehouse is visualized using **Power BI** to deliver insights on seismic activity trends, frequency, significance distribution, and geographic patterns.
 
-Dashboards include:
-- Daily and weekly earthquake counts
-- Magnitude distribution charts
-- Geographic mapping of earthquake events
-- Significance class breakdown (Low / Moderate / High)
+![Combined Power BI Visualization](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/Combined_Viz2.PNG)
 
-Power BI connects to the Fabric Lakehouse using Direct Lake mode, ensuring high performance and real-time data refresh.
+Dashboards include:
+- Top Countries with Earthquakes
+- Magnitude distribution charts and the Earthquake with the most impact
+- Geographic mapping of earthquake events
+- Severity class breakdown (Low / Moderate / High) and lots more!
+
+#### Looking Closer:
+The pipeline has been paused to save costs, so the Visualization link is currently unavailable for public consumption.
+
+![Page 1 Power BI Visualization](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/Viz2_Page1.PNG)
+
+![Page 2 Power BI Visualization](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/Viz2_Page2.PNG)
+
+
+## Contact
+Please reach out to me on [LinkedIn](https://www.linkedin.com/in/edidiong-esu-1942a2129/) for thoughts and/or issues encountered during reproduction of project. Let's chat! :star:.
+
+**Happy Coding!** :computer:
 
 
