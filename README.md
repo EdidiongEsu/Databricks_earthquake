@@ -222,6 +222,8 @@ The notebook takes two date parameters — `start_date` and `end_date` — which
 
 At the end of this step, the raw earthquake data is stored in JSON format in the Bronze layer of Azure Data Lake Gen2, ready for further processing in Databricks.
 
+---
+
 #### ⚙️ Silver Notebook
 
 The [**Silver Notebook**](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/code/Databricks%20notebooks/Silver%20Notebook.ipynb) notebook processes the JSON data from the Bronze layer by flattening nested fields (like coordinates and properties), renaming columns, and handling missing values.
@@ -234,6 +236,7 @@ The [**Silver Notebook**](https://github.com/EdidiongEsu/Databricks_earthquake/b
 ```
 The cleaned and flattened data is saved in parquet format in the Silver layer of Azure Data Lake Gen2, making it ready for enrichment.
 
+---
 
 #### 🏅 Gold Notebook
 
@@ -246,7 +249,10 @@ The [**Gold Notebook**](https://github.com/EdidiongEsu/Databricks_earthquake/blo
   "silver_params": "@string(activity('Silver Notebook').output.runOutput)"
 }
 ```
-The enriched dataset, now with country codes and significance classifications, is stored in Delta format in the Gold layer and made available to Microsoft Fabric Lakehouse for downstream analytics.
+The enriched dataset, now with country codes and significance classifications, is stored in Delta format in the Gold layer and made available to Microsoft Fabric Lakehouse for downstream analytics,
+
+
+---
 
 #### Triggers
 A daily Trigger is created and time set to run the pipeline daily. This is after debug run has been done and everything confirmed to work fine
@@ -268,9 +274,6 @@ Key benefits:
 - Stored in Delta format within the OneLake architecture  
 - Optimized for low-latency querying  
 - Natively available to Power BI through Direct Lake mode
-
-- 
-
 
 ---
 ## Dashboard
