@@ -298,7 +298,7 @@ The pipeline has been paused to save costs, so the Visualization link is current
 
 
 ## Contact
-Please reach out to me on [LinkedIn](https://www.linkedin.com/in/edidiong-esu-1942a2129/) for thoughts and/or issues encountered during reproduction of project. Let's chat! :star:.
+Please reach out to me on [LinkedIn](https://www.linkedin.com/in/edidiong-esu-1942a2129/) for thoughts and/or issues encountered during the reproduction of this project. Let's chat! :star:.
 
 **Happy Coding!** :computer:
 
