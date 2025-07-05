@@ -1,4 +1,4 @@
-# End-to-End Earthquake Data Pipeline with Azure, Databricks & Power BI
+# End-to-End Earthquake Data Engineering & Analytics Pipeline with Azure Data Factory, Databricks & Power BI
 ## still building
 ## Navigation / Quick Access
 Quickly move to the section you are interested in by clicking on the appropriate link:
@@ -12,29 +12,92 @@ Quickly move to the section you are interested in by clicking on the appropriate
 
 ---
 ## Overview
-This project extracts, moves, and analyzes USGS's [United States Geological Survey]([https://ride.capitalbikeshare.com](https://www.usgs.gov/programs/earthquake-hazards)) data.
-The USGS monitors and reports on earthquakes, assesses earthquake impacts and hazards, and conducts targeted research on the causes and effects of earthquakes.
 
+Every day, hundreds of earthquakes shake the earth — some minor, others devastating. Understanding where, when, and how they occur is crucial for monitoring natural hazards, informing infrastructure planning, and protecting communities.
 
+This project extracts and analyzes real-time earthquake data from the [United States Geological Survey (USGS)](https://www.usgs.gov/programs/earthquake-hazards), an agency that tracks seismic activity around the globe. The data is ingested daily via Azure Data Factory, transformed in Azure Databricks using the **medallion architecture** (bronze → silver → gold), stored in **Microsoft Fabric Lakehouse**, and visualized using **Power BI**.
+
+The pipeline demonstrates how raw JSON data from a public API can be converted into structured, trusted insights using modern, cloud-native tools. By the end of the pipeline, users can explore:
+
+- 🌍 Earthquake hotspots by country and region  
+- 📈 Magnitude trends over time  
+- 🚨 Significant seismic events by signal strength  
+- 🕒 Time-based patterns of earthquake activity
+
+This project showcases how scalable data engineering workflows can power decision-ready dashboards, turning global sensor data into actionable intelligence for analysts, researchers, and the public.
 
 ---
 
+## Project Objective
 
-
-
+- ✅ Automate daily ingestion of global earthquake data from the USGS API using Azure Data Factory  
+- ✅ Transform and enrich raw data using Azure Databricks with a medallion architecture (bronze → silver → gold)  
+- ✅ Store trusted and structured data in **Microsoft Fabric Lakehouse**  
+- ✅ Build interactive **Power BI** dashboards that uncover patterns, trends, and anomalies in global seismic activity  
 
 -----
 ## Project Architecture
 ![Alt text](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/Earthquake%20architecture.gif)
 
-The data architecture is an overview of the end-to-end pipeline which include:
-- Ingesting of source dataset to Azure Datalake using Azure Data Factory
-- 
-- Moving data and staging in a dataware house which is big query
-- transforming the data using dbt via dbt cloud
-- Creation of dashboard with Power BI
+This architecture illustrates the end-to-end data pipeline used in this project, leveraging Azure and Microsoft Fabric services to move from raw ingestion to visual insights.
+
+### 🔄 End-to-End Pipeline Flow
+
+1. **🔁 Ingestion – Azure Data Factory**  
+   - Daily earthquake data is ingested from the USGS API.  
+   - Azure Data Factory orchestrates the process and stores the data in **Azure Data Lake**.
+
+2. **⚙️ Transformation – Azure Databricks (Medallion Architecture)**  
+   - Data is processed through three structured layers:
+     - **Bronze Layer**: Raw ingestion and flattening
+     - **Silver Layer**: Cleansing, filtering, standardization
+     - **Gold Layer**: Aggregated and enriched for reporting
+
+3. **🏠 Storage – Microsoft Fabric Lakehouse**  
+   - The gold-layer data is loaded into **Microsoft Fabric Lakehouse** for scalable storage and advanced analytics.
+
+4. **📊 Visualization – Power BI**  
+   - Fabric Lakehouse feeds directly into **Power BI**, enabling dynamic dashboards and reports for stakeholders.
+
+✅ This architecture ensures a reliable, scalable, and analytics-ready pipeline from API to dashboard.
 
 
+----
+## Dataset
+### 🌍 Source: USGS Earthquake API
+
+This project collects seismic data from the [United States Geological Survey (USGS) Earthquake API](https://earthquake.usgs.gov/fdsnws/event/1/), which provides detailed information about global earthquake events.
+
+- **API Endpoint:** [https://earthquake.usgs.gov/fdsnws/event/1/](https://earthquake.usgs.gov/fdsnws/event/1/)
+- **Data Format:** GeoJSON
+- **Ingestion:** Daily via Azure Data Factory
+- **Dynamic Parameters:**
+  - `starttime`: set dynamically during ingestion
+  - `endtime`: optional, defaults to the same as `starttime`
+
+📘 [API Documentation](https://earthquake.usgs.gov/fdsnws/event/1/)
+
+### Gold Layer Schema (Final Output)
+
+The final dataset is produced in the **gold layer** after cleaning, enrichment, and transformation in Databricks. This output is ready for analytics or visualization.
+
+```text
+|-- id: string (nullable = true)
+|-- longitude: double (nullable = true)
+|-- latitude: double (nullable = true)
+|-- elevation: double (nullable = true)
+|-- title: string (nullable = true)
+|-- place_description: string (nullable = true)
+|-- sig: long (nullable = true)
+|-- mag: double (nullable = true)
+|-- magType: string (nullable = true)
+|-- time: timestamp (nullable = true)
+|-- updated: timestamp (nullable = true)
+|-- country_code: string (nullable = true)
+|-- sig_class: string (nullable = false)
+```
+
+----
 
 ## Reproducing Project
 
