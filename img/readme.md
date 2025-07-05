@@ -1,2 +1,2 @@
 # Img Folder
-This contains all pictires used in the readme on main branch
+This contains all pictures used in the readme on the main branch.
