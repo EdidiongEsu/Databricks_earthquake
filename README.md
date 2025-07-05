@@ -99,7 +99,7 @@ The final dataset is produced in the **gold layer** after cleaning, enrichment, 
 
 ## Reproducing Project
 
-This project uses Azure Data Factory to move data into an Azure Databricks notebook (bronze layer). Follow the steps below to set up the environment.
+This project uses Azure Data Factory to move data through Azure Databricks notebooks (bronze, silver, gold layers). Follow the steps below to set up the environment.
 
 ---
 
@@ -142,7 +142,7 @@ A resource group organizes related Azure resources.
 - Fill in:
   - Workspace name (e.g., `databricks-dev`)
   - Same region as ADF
-  - Pricing tier: Standard
+  - Pricing tier: Standard. There is a trial tier that is limited for 14 days also
 - After deployment, click **Launch Workspace** to open the Databricks UI
 
 📘 [Create Azure Databricks Workspace](https://learn.microsoft.com/en-us/azure/databricks/getting-started/)
@@ -154,7 +154,7 @@ A resource group organizes related Azure resources.
 Inside the Databricks workspace:
 
 - Go to **Compute** → Click **Create Cluster**
-  - Runtime: 11.3 LTS or higher
+  - Runtime: 11.3 LTS for mInimal Configuration. Choose cluster to turn off after 30 mins of inactivity to save cost.
   - Keep other settings default for development
 - Go to **Workspace** → Your username → Click **New > Notebook**
   - Name: `bronze_ingest`
@@ -189,4 +189,101 @@ Now ADF can run your Databricks notebooks as activities in a pipeline.
 
 ---
 
-✅ You’re all set. Next, create your pipeline in ADF and point it to the Databricks notebook to run your bronze-layer ingestion logic.
+### 8. 🧪 Configure Earthquake Pipeline in ADF Using Databricks Notebooks
+
+After setting up the Azure environment and connecting to Databricks, the next step is to configure the earthquake pipeline using a series of Databricks notebooks that follow the **medallion architecture**: Bronze → Silver → Gold.
+
+Each notebook runs as an activity in the ADF pipeline, and parameters are passed between them dynamically.
+
+---
+
+#### 📁 ADF Pipeline Overview
+
+The ADF pipeline orchestrates the daily execution of the Databricks notebooks. Below is the structure of the pipeline:
+
+![ADF Pipeline](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/adf_pipeline.PNG)
+
+#### 🟫 Bronze Notebook
+
+The [**Bronze Notebook**](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/code/Databricks%20notebooks/Bronze%20Notebook.ipynb) ingests raw earthquake data and stores it in json format in the Bronze layer of the lakehouse.
+
+##### 🔧 Base Parameters
+
+The notebook takes two date parameters — `start_date` and `end_date` — which are dynamically generated in ADF using the following expressions:
+
+```json
+{
+  "start_date": "@formatDateTime(addDays(utcNow(), -1), 'yyyy-MM-dd')",
+  "end_date": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+}
+```
+
+![Bronze Base Paramters](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/base_parameters.PNG)
+
+At the end of this step, the raw earthquake data is stored in JSON format in the Bronze layer of Azure Data Lake Gen2, ready for further processing in Databricks.
+
+#### ⚙️ Silver Notebook
+
+The [**Silver Notebook**](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/code/Databricks%20notebooks/Silver%20Notebook.ipynb) notebook processes the JSON data from the Bronze layer by flattening nested fields (like coordinates and properties), renaming columns, and handling missing values.
+
+##### 🔧 Base Parameters
+```json
+{
+  "bronze_params": "@string(activity('Bronze Notebook').output.runOutput)"
+}
+```
+The cleaned and flattened data is saved in parquet format in the Silver layer of Azure Data Lake Gen2, making it ready for enrichment.
+
+
+#### 🏅 Gold Notebook
+
+The [**Gold Notebook**](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/code/Databricks%20notebooks/Gold%20Notebook.ipynb) enriches the Silver data by assigning a `country_code` to each earthquake event using reverse geocoding, and classifies each event's significance (`sig`) as **Low**, **Moderate**, or **High** to support downstream analytics.
+
+##### 🔧 Base Parameters
+```json
+{
+  "bronze_params": "@string(activity('Bronze Notebook').output.runOutput)",
+  "silver_params": "@string(activity('Silver Notebook').output.runOutput)"
+}
+```
+The enriched dataset, now with country codes and significance classifications, is stored in Delta format in the Gold layer and made available to Microsoft Fabric Lakehouse for downstream analytics.
+
+#### Triggers
+A daily Trigger is created and time set to run the pipeline daily. This is after debug run has been done and everything confirmed to work fine
+![ADF Pipeline](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/img/pipelineruns.PNG)
+
+---
+### 9. 🏞️ Moving Data to Microsoft Fabric Lakehouse
+
+After enrichment in the Gold notebook including the addition of fields like `country_code, The output files are passed into a **Fabrics Notebook** for final processing
+
+The [**Fabrics Notebook**](https://github.com/EdidiongEsu/Databricks_earthquake/blob/main/code/Fabrics%20Notebook/Merge%20Data.ipynb) performs the following:
+- Merges partitioned output files
+- Applies any final transformations (e.g., standardizing `country_name`)
+- Outputs a clean, unified **Delta table** in the **Microsoft Fabric Lakehouse**
+
+This structured table serves as the final dataset for reporting and analytics.
+
+Key benefits:
+- Stored in Delta format within the OneLake architecture  
+- Optimized for low-latency querying  
+- Natively available to Power BI through Direct Lake mode
+
+- 
+
+
+---
+
+### 10. 📊 Visualizing in Power BI
+
+The data in the Fabric Lakehouse is visualized using **Power BI** to deliver insights on seismic activity trends, frequency, significance distribution, and geographic patterns.
+
+Dashboards include:
+- Daily and weekly earthquake counts
+- Magnitude distribution charts
+- Geographic mapping of earthquake events
+- Significance class breakdown (Low / Moderate / High)
+
+Power BI connects to the Fabric Lakehouse using Direct Lake mode, ensuring high performance and real-time data refresh.
+
+
