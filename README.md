@@ -1,12 +1,10 @@
 # End-to-End Earthquake Data Engineering & Analytics Pipeline with Azure, Databricks & Power BI
-## still building
 ## Navigation / Quick Access
 Quickly move to the section you are interested in by clicking on the appropriate link:
 - [Overview](https://github.com/EdidiongEsu/Databricks_earthquake/tree/main#overview)
 - [Project Objective](https://github.com/EdidiongEsu/Databricks_earthquake/tree/main#project-objective)
 - [Project Architecture](https://github.com/EdidiongEsu/Databricks_earthquake/tree/main#project-architecture)
 - [Dataset](https://github.com/EdidiongEsu/Databricks_earthquake/tree/main#dataset)
-- [Technologies](https://github.com/EdidiongEsu/Databricks_earthquake/tree/main#technologies)
 - [Reproducing Project](https://github.com/EdidiongEsu/Databricks_earthquake/tree/main#reproducing-project) (long section)
 - [Dashboard](https://github.com/EdidiongEsu/Databricks_earthquake/tree/main#dashboard)
 
